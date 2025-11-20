@@ -1,0 +1,10 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Mubai.UnitOfWork.Abstractions;
+
+namespace Mubai.UnitOfWork.EntityFrameworkCore
+{
+    public interface IEfUnitOfWork<TContext> : IUnitOfWork, IDisposable, IAsyncDisposable where TContext : DbContext
+    {
+        TContext DbContext { get; }
+    }
+}
