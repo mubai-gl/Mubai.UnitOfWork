@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Mubai.UnitOfWork.Abstractions;
 using Mubai.UnitOfWork.EntityFrameworkCore;
 using System.Reflection;
 using Xunit;

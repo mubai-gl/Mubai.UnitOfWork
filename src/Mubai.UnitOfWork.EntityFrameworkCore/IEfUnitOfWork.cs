@@ -3,7 +3,7 @@ using Mubai.UnitOfWork.Abstractions;
 
 namespace Mubai.UnitOfWork.EntityFrameworkCore
 {
-    public interface IEfUnitOfWork<TContext> : IUnitOfWork, IDisposable, IAsyncDisposable where TContext : DbContext
+    public interface IEfUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
     {
         TContext DbContext { get; }
     }

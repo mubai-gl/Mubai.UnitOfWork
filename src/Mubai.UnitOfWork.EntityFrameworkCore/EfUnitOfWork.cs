@@ -13,13 +13,8 @@ namespace Mubai.UnitOfWork.EntityFrameworkCore
         public async Task<bool> BeginTransactionAsync(CancellationToken token = default)
         {
             // Non-relational databases don't need transactions, directly return false
-            if (_currentTransaction is not null || !_dbContext.Database.IsRelational())
-            {
-                return false;
-            }
-
             // If there's already a transaction, it means it's a "nested call", reuse the existing transaction
-            if (_currentTransaction is not null)
+            if (_currentTransaction is not null || !_dbContext.Database.IsRelational())
             {
                 return false;
             }
@@ -58,7 +53,7 @@ namespace Mubai.UnitOfWork.EntityFrameworkCore
 
         public async Task ExecuteInTransactionAsync(Func<CancellationToken, Task> operation, CancellationToken token = default)
         {
-            // If there's no current transaction, open one; if there's already a transaction, return false
+            // If there's no current transaction, open one; if there is, reuse it and skip commit/rollback here
             var transactionStarted = await BeginTransactionAsync(token);
 
             try

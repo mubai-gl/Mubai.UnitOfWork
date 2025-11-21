@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Mubai.UnitOfWork.Abstractions
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable, IAsyncDisposable
     {
         Task<bool> BeginTransactionAsync(CancellationToken token = default);
         Task CommitAsync(CancellationToken token = default);
