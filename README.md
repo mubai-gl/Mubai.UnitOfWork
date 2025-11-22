@@ -30,7 +30,7 @@ A lightweight Unit of Work abstraction plus an EF Core implementation. `Mubai.Un
    
    ```csharp
    services.AddDbContext<AppDbContext>(...);
-   services.AddScoped<IEfUnitOfWork<AppDbContext>, EfUnitOfWork<AppDbContext>>();
+   services.AddScoped<IUnitOfWork, IUnitOfWork<AppDbContext>>();
    ```
 
 3. Automatic transaction boundary
@@ -39,7 +39,7 @@ A lightweight Unit of Work abstraction plus an EF Core implementation. `Mubai.Un
     await unitOfWork.ExecuteInTransactionAsync(async ct =>
     {
         db.Set<Post>().Add(new Post { Title = "Hello" });
-        await db.SaveChangesAsync(ct);
+        await unitOfWork.SaveChangesAsync(ct);
     });
    ```
 

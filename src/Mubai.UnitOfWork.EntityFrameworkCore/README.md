@@ -11,7 +11,7 @@ Reference the project or package alongside your `DbContext`.
 Register via DI
    ```csharp
    services.AddDbContext<AppDbContext>(...);
-   services.AddScoped<IEfUnitOfWork<AppDbContext>, EfUnitOfWork<AppDbContext>>();
+   services.AddScoped<IUnitOfWork, IUnitOfWork<AppDbContext>>();
    ```
 
 ### Automated Execution
@@ -20,7 +20,7 @@ Use `ExecuteInTransactionAsync` to complete the transaction by wrapping business
    await unitOfWork.ExecuteInTransactionAsync(async ct =>
    {
        db.Set<Entity>().Add(item);
-       await db.SaveChangesAsync(ct);
+       await unitOfWork.SaveChangesAsync(ct);
    });
    ```
 

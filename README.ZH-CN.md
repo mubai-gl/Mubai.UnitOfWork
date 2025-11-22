@@ -30,7 +30,7 @@
    
    ```csharp
    services.AddDbContext<AppDbContext>(...);
-   services.AddScoped<IEfUnitOfWork<AppDbContext>, EfUnitOfWork<AppDbContext>>();
+   services.AddScoped<IUnitOfWork, IUnitOfWork<AppDbContext>>();
    ```
 
 3. 自动事务包裹
@@ -39,7 +39,7 @@
     await unitOfWork.ExecuteInTransactionAsync(async ct =>
     {
         db.Set<Post>().Add(new Post { Title = "Hello" });
-        await db.SaveChangesAsync(ct);
+        await unitOfWork.SaveChangesAsync(ct);
     });
    ```
 

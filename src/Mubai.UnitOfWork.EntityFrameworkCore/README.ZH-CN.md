@@ -11,7 +11,7 @@ EF Core 的工作单元实现。封装 `DbContext`，提供事务开启、提交
 引用项目或包，并通过 DI 注册
    ```csharp
    services.AddDbContext<AppDbContext>(...);
-   services.AddScoped<IEfUnitOfWork<AppDbContext>, EfUnitOfWork<AppDbContext>>();
+   services.AddScoped<IUnitOfWork, IUnitOfWork<AppDbContext>>();
    ```
 ### 自动执行
 使用`ExecuteInTransactionAsync`通过包裹业务，完成对事务的控制
