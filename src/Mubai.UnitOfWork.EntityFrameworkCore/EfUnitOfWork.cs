@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Mubai.UnitOfWork.EntityFrameworkCore
 {
-    public class EfUnitOfWork<TContext>(TContext dbContext) : IEfUnitOfWork<TContext> where TContext : DbContext
+    public class EfUnitOfWork<TContext>(TContext dbContext) : IUnitOfWork<TContext> where TContext : DbContext
     {
         private readonly TContext _dbContext = dbContext;
 

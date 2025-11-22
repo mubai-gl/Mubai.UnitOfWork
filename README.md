@@ -30,7 +30,11 @@ A lightweight Unit of Work abstraction plus an EF Core implementation. `Mubai.Un
    
    ```csharp
    services.AddDbContext<AppDbContext>(...);
-   services.AddScoped<IUnitOfWork, IUnitOfWork<AppDbContext>>();
+
+   // If you only have one DbContext
+   services.AddScoped<IUnitOfWork<AppDbContext>, EfUnitOfWork<AppDbContext>>();
+   // If you still resolve via the non-generic interface, forward it
+   services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<IUnitOfWork<AppDbContext>>());
    ```
 
 3. Automatic transaction boundary
@@ -61,6 +65,30 @@ A lightweight Unit of Work abstraction plus an EF Core implementation. `Mubai.Un
         }
     }
    ```
+
+## Multiple DbContexts (avoid overriding)
+
+```csharp
+services.AddDbContext<MainDbContext>(...);
+services.AddDbContext<AuditDbContext>(...);
+
+// Register the open generic once; inject the concrete IUnitOfWork<TContext> where needed
+services.AddScoped(typeof(IUnitOfWork<>), typeof(EfUnitOfWork<>));
+
+public class FooService(
+    IUnitOfWork<MainDbContext> mainUow,
+    IUnitOfWork<AuditDbContext> auditUow)
+{
+    // Control transactions for different DbContexts separately
+}
+```
+
+> Avoid registering multiple implementations on the same non-generic interface, e.g.:
+> ```csharp
+> services.AddScoped<IUnitOfWork, EfUnitOfWork<MainDbContext>>();
+> services.AddScoped<IUnitOfWork, EfUnitOfWork<AuditDbContext>>();
+> ```
+> The second line will override the first.
 
 ## Roadmap
 
